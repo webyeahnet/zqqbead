@@ -4,41 +4,33 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0,30 0-16 * * *'
-  watch:
+ watch:
     types: started
   repository_dispatch:
-    types: ranlv
+    types: bean_change
 jobs:
   build:
 
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
+    env:
+        zqydbody: ${{ secrets.ZQYDBODY }}
+
+     
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-       
-      - name: Use Node.js ${{ matrix.node-version }}
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Cache node_modules
-        uses: actions/cache@v2 # 使用 GitHub 官方缓存 Action。
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }} # 使用 package-lock.json 的 Hash 作为缓存的 key。也可以使用 package.json 代替
+          node-version: 14.x
       - name: npm install
         run: |
-          npm install
-      - name: '运行 【zqyd】'
+          npm install 
+          npm install cron
+          npm install request
+      - name: '运行 【zqkkhear】'
+        if: env.zqydbody
         run: |
-          node Task/zqyd.js
+          node zqyd.js
         env:
-          #RLURL: ${{ secrets.RLURL }}
-          #RLHEADER: ${{ secrets.RLHEADER }}
-          PUSH_KEY: ${{ secrets.PUSH_KEY }}
-          BARK_SOUND: ${{ secrets.BARK_SOUND }}
-          BARK_PUSH: ${{ secrets.BARK_PUSH }}
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_USER_ID: ${{ secrets.TG_USER_ID }}
+          zqydbody: ${{ secrets.ZQYDBODY }}
