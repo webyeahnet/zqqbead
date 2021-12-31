@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: 30 5,16 * * *
- watch:
+  watch:
     types: started
   repository_dispatch:
     types: bean_change
