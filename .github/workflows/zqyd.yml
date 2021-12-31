@@ -3,7 +3,7 @@ name: zqyd
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 1,16 * * *
+    - cron: 30 5,16 * * *
  watch:
     types: started
   repository_dispatch:
